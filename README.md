@@ -1,7 +1,7 @@
 # Guía breve de programación en C++
 
 *Prof. Jose Francisco Ruiz Muñoz*<br>
-*Programación Avanzada 2026-I*<br>
+*Programación Avanzada 2026-II*<br>
 *Universidad Nacional de Colombia - Sede de La Paz*<br>
 
 El lenguaje C++ extiende el lenguaje C incorporando abstracciones de alto nivel como programación orientada a objetos, genéricos (templates) y manejo más seguro de recursos. Es ampliamente utilizado en sistemas de alto rendimiento, videojuegos, simulación científica y software industrial.
@@ -299,12 +299,60 @@ p.saludar();
 
 ## 6. Manejo de memoria
 
+### 6.0 Stack vs. heap
+
+Un programa organiza su memoria en distintas zonas. Dos de las más relevantes son:
+
+* **Stack (pila)**: memoria automática. Las variables locales se reservan y liberan solas al entrar y salir de un bloque `{ }`. Es rápida, pero su tamaño es limitado y la vida de las variables está atada al alcance donde se declaran.
+* **Heap (montículo)**: memoria dinámica. El programador la reserva explícitamente con `new` y debe liberarla con `delete`. Permite crear objetos cuyo tamaño no se conoce en tiempo de compilación, o que deben seguir existiendo más allá del bloque donde se crearon.
+
+```cpp
+void f() {
+    int a = 10;              // en el stack: se libera sola al salir de f()
+
+    int* p = new int(20);    // en el heap: persiste hasta hacer delete
+    delete p;                // liberación manual
+}
+```
+
+Como la memoria del heap no se libera automáticamente, es responsabilidad del programador hacerlo; si se olvida, ocurre una **fuga de memoria** (ver sección 9, punto 4).
+
+**¿Cuándo usar cada uno?**
+
+Regla general: usar el stack por defecto, y el heap solo cuando se necesite explícitamente.
+
+Usar el **stack** cuando:
+
+* El tamaño del objeto se conoce en tiempo de compilación.
+* El objeto solo necesita existir dentro del bloque/función donde se crea.
+* Se quiere simplicidad y rendimiento (no hay que llamar a `delete` ni hay riesgo de fugas).
+
+Usar el **heap** cuando:
+
+1. **El tamaño no se conoce hasta tiempo de ejecución** (por ejemplo, depende de una entrada del usuario).
+2. **El objeto debe sobrevivir más allá del bloque donde se crea.**
+3. **El objeto es muy grande**: el stack tiene un tamaño limitado (unos pocos MB); estructuras grandes suelen ir al heap para evitar un *stack overflow*.
+4. **Se necesita ownership compartido o polimorfismo** (por ejemplo, guardar objetos de distintas subclases a través de un puntero base).
+
+En C++ moderno casi nunca se usa `new`/`delete` manualmente. Se prefieren estructuras que gestionan el heap automáticamente: `std::vector`, `std::string` (tamaño dinámico) y punteros inteligentes como `std::unique_ptr` (RAII, ver más abajo en esta sección).
+
+---
+
 En C++ clásico:
 
 ```cpp
 int* p = new int(5);
 delete p;
 ```
+
+Aquí `new int(5)` reserva memoria para **un solo entero**, inicializado con el valor `5`. El `(5)` no es un tamaño: no crea un arreglo. Para reservar un arreglo dinámico se usan corchetes:
+
+```cpp
+int* arr = new int[5];    // arreglo de 5 enteros (valores indeterminados)
+delete[] arr;             // los arreglos se liberan con delete[], no delete
+```
+
+Usar `delete` en un puntero reservado con `new[]` (o viceversa) es comportamiento indefinido.
 
 En C++ moderno se recomienda usar **RAII** (Resource Acquisition Is Initialization) y punteros inteligentes:
 
@@ -461,6 +509,22 @@ Y verificar antes de usar.
 int* p = new int(5);
 // si no se hace delete, hay fuga de memoria
 ```
+
+`new int(5)` reserva un entero en el heap con valor inicial `5`. Esa memoria queda reservada hasta que se llame explícitamente a `delete p;`. La fuga de memoria ocurre si el programa pierde la referencia a `p` (por ejemplo, `p` sale de alcance, o se le reasigna otro valor) **antes** de liberar esa memoria: ya no hay forma de acceder a ella para hacer `delete`, y el sistema operativo no la recupera hasta que el programa termina.
+
+**¿Qué es una fuga de memoria (memory leak)?**
+
+Una fuga de memoria ocurre cuando un programa reserva memoria dinámicamente (con `new`, por ejemplo) y pierde toda forma de acceder a ella sin haberla liberado con `delete`. La memoria queda ocupada desde el punto de vista del sistema operativo, pero el programa ya no tiene ningún puntero hacia ella.
+
+Otra forma común de generar una fuga es reasignar el puntero sin liberar lo anterior:
+
+```cpp
+int* p = new int(5);
+p = new int(10);   // fuga: se perdió la referencia al primer int(5)
+delete p;           // solo libera el segundo, el primero quedó perdido
+```
+
+Si esto se repite muchas veces (por ejemplo, dentro de un bucle o en un programa de larga duración como un servidor), el programa consume cada vez más memoria RAM, lo que puede degradar el rendimiento o llegar a agotar la memoria disponible.
 
 Mejor práctica en C++ moderno:
 
