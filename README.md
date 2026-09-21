@@ -396,7 +396,7 @@ if (p != nullptr) {
 }
 ```
 
-Un puntero no inicializado puede apuntar a cualquier dirección de memoria.
+**¿Por qué inicializar en `nullptr`?** Si se declara un puntero sin darle un valor (`int* p;`), el compilador no le asigna `nullptr` automáticamente: la variable queda con lo que hubiera antes en esa zona de memoria. Ese puntero "sin inicializar" puede apuntar a cualquier dirección, y usarlo (`*p`) es comportamiento indefinido. Por eso siempre se inicializa a `nullptr` y se verifica con `if (p != nullptr)` antes de usarlo.
 
 ---
 

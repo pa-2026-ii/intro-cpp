@@ -4,10 +4,6 @@
 
 ## Instrucciones de entrega
 
-La solución de los ejercicios debe presentarse en formato de diapositivas.
-
-Las diapositivas deben:
-
 * Incluir explicaciones claras y concisas de cada ejercicio.
 
 * Incorporar recursos gráficos adecuados (diagramas, esquemas, fragmentos de código comentados) que faciliten la comprensión de los conceptos desarrollados.
@@ -18,7 +14,7 @@ Las diapositivas deben:
 
 ---
 
-## Ejercicio 1 — Inicialización y narrowing
+## Ejercicio 1
 
 Escriba un programa que:
 
@@ -36,7 +32,7 @@ Explique:
 
 ---
 
-## Ejercicio 2 — Variables no inicializadas
+## Ejercicio 2
 
 Escriba un programa que:
 
@@ -51,7 +47,7 @@ Explique:
 
 ---
 
-## Ejercicio 3 — Paso por valor
+## Ejercicio 3
 
 Implemente una función:
 
@@ -71,7 +67,7 @@ Explique por qué ocurre esto.
 
 ---
 
-## Ejercicio 4 — Paso por referencia
+## Ejercicio 4
 
 Modifique el ejercicio anterior usando:
 
@@ -88,7 +84,7 @@ Explique la diferencia conceptual entre:
 
 ---
 
-## Ejercicio 5 — Alcance de variables
+## Ejercicio 5
 
 Escriba un programa que:
 
@@ -103,26 +99,32 @@ Explique:
 
 ---
 
-## Ejercicio 6 — Uso incorrecto de punteros
+## Ejercicio 6
 
-Escriba un programa que:
+Implemente varias versiones de una función `mostrar` usando sobrecarga:
 
-1. Declare un puntero sin inicializar.
-2. Intente usarlo.
+```cpp
+void mostrar(int valor);
+void mostrar(double valor);
+void mostrar(const std::string& valor);
+```
 
-Luego:
+Cada versión debe imprimir el valor recibido junto con una indicación del tipo (por ejemplo: `"Entero: 5"`, `"Decimal: 3.14"`, `"Texto: Hola"`).
 
-1. Corrija el programa inicializando el puntero con `nullptr`.
-2. Agregue una verificación antes de usarlo.
+En `main`:
+
+1. Llame a `mostrar` con un `int`, un `double` y un `std::string`.
+2. Observe cómo el compilador selecciona la versión correcta según el tipo del argumento.
 
 Explique:
 
-* ¿Qué significa comportamiento indefinido?
-* ¿Por qué `nullptr` es importante?
+* ¿Qué es la sobrecarga de funciones (*function overloading*)?
+* ¿Cómo decide el compilador cuál versión invocar?
+* ¿Qué diferencia hay entre sobrecarga y templates?
 
 ---
 
-## Ejercicio 7 — Memoria dinámica con `new` y `delete`
+## Ejercicio 7
 
 Escriba un programa que:
 
@@ -137,7 +139,7 @@ Explique:
 
 ---
 
-## Ejercicio 8 — Uso de `std::unique_ptr`
+## Ejercicio 8
 
 Reescriba el ejercicio anterior usando:
 
@@ -152,7 +154,7 @@ Explique:
 
 ---
 
-## Ejercicio 9 — Clase simple
+## Ejercicio 9
 
 Defina una clase `Rectangulo` con:
 
@@ -169,7 +171,7 @@ Use inicialización uniforme para los atributos.
 
 ---
 
-## Ejercicio 10 — Función template
+## Ejercicio 10
 
 Implemente una función template:
 
