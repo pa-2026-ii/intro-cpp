@@ -440,6 +440,42 @@ Permite escribir código independiente del tipo.
 
 ---
 
+### 7.1 Paso de un arreglo como argumento (deducción del tamaño)
+
+Cuando un arreglo se pasa a una función de la forma clásica, **decae a un puntero** y la función pierde la información de su tamaño:
+
+```cpp
+int longitud(int* p) {
+    // aquí ya no se sabe cuántos elementos tiene p
+}
+```
+
+Para conservar el tamaño, se puede pasar el arreglo **por referencia** y usar un **template** que deduzca `N` (el número de elementos) a partir del tipo del argumento:
+
+```cpp
+template <size_t N>
+int longitud(int (&p)[N]) {
+    int lon = 0;
+    for (int v : p) {
+        lon++;
+    }
+    return lon;
+}
+```
+
+Uso:
+
+```cpp
+int arr[5] = {1, 2, 3, 4, 5};
+longitud(arr);   // N se deduce como 5, sin pasarlo explícitamente
+```
+
+`int (&p)[N]` significa: "`p` es una referencia a un arreglo de `int` de tamaño `N`". El compilador deduce `N` automáticamente a partir del arreglo que se pase como argumento, por eso el `for` basado en rango (`for (int v : p)`) funciona dentro de la función: `p` conserva su tamaño real, a diferencia de un puntero `int*`.
+
+Esta técnica solo aplica a arreglos de tamaño fijo conocido en tiempo de compilación (`int arr[5]`). En C++ moderno, para arreglos de tamaño dinámico se prefiere `std::vector`, que ya conoce su propio tamaño (`v.size()`) sin necesidad de este truco.
+
+---
+
 ## 8. Relación con bajo nivel
 
 C++ mantiene compatibilidad con C:
