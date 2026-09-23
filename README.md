@@ -268,38 +268,9 @@ Diferencia conceptual:
 
 ---
 
+## 5. Manejo de memoria
 
----
-
-## 5. Programación orientada a objetos
-
-### 5.1 Definición de clase
-
-```cpp
-class Persona {
-public:
-    std::string nombre;
-    int edad;
-
-    void saludar() {
-        std::cout << "Hola\n";
-    }
-};
-```
-
-Uso:
-
-```cpp
-Persona p;
-p.nombre = "Ana";
-p.saludar();
-```
-
----
-
-## 6. Manejo de memoria
-
-### 6.0 Stack vs. heap
+### 5.0 Stack vs. heap
 
 Un programa organiza su memoria en distintas zonas. Dos de las más relevantes son:
 
@@ -380,7 +351,7 @@ Así se evitan fugas de memoria (olvidar `delete`) y dobles liberaciones.
 
 ---
 
-## 6.1 Uso básico de punteros seguros
+## 5.1 Uso básico de punteros seguros
 
 En C++ moderno se recomienda:
 
@@ -403,7 +374,7 @@ if (p != nullptr) {
 
 ---
 
-## 6.2 Alcance (scope) de variables
+## 5.2 Alcance (scope) de variables
 
 Las variables solo existen dentro del bloque donde se declaran.
 
@@ -419,7 +390,7 @@ Intentar usar una variable fuera de su alcance produce error.
 ---
 
 
-## 7. Templates (Programación genérica)
+## 6. Templates (Programación genérica)
 
 ```cpp
 template <typename T>
@@ -440,7 +411,7 @@ Permite escribir código independiente del tipo.
 
 ---
 
-### 7.1 Paso de un arreglo como argumento (deducción del tamaño)
+### 6.1 Paso de un arreglo como argumento (deducción del tamaño)
 
 Cuando un arreglo se pasa a una función de la forma clásica, **decae a un puntero** y la función pierde la información de su tamaño:
 
@@ -476,7 +447,7 @@ Esta técnica solo aplica a arreglos de tamaño fijo conocido en tiempo de compi
 
 ---
 
-## 8. Relación con bajo nivel
+## 7. Relación con bajo nivel
 
 C++ mantiene compatibilidad con C:
 
@@ -485,6 +456,32 @@ C++ mantiene compatibilidad con C:
 * Traducción eficiente a código máquina
 
 Sin embargo, incorpora abstracciones que el compilador optimiza sin costo adicional cuando se usan correctamente.
+
+---
+
+## 8. Programación orientada a objetos
+
+### 8.1 Definición de clase
+
+```cpp
+class Persona {
+public:
+    std::string nombre;
+    int edad;
+
+    void saludar() {
+        std::cout << "Hola\n";
+    }
+};
+```
+
+Uso:
+
+```cpp
+Persona p;
+p.nombre = "Ana";
+p.saludar();
+```
 
 ---
 
